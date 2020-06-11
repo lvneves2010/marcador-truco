@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
@@ -32,67 +33,99 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter2 = 0;
   bool nosGanhamos = false;
 
-  void _incrementCounterUs() {
+  @override
+  void initState() {
+    super.initState();
+    _loadCounter();
+  }
+
+  //Loading counter value on start
+  _loadCounter() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _counter = (prefs.getInt('counter') ?? 0);
+      _counter2 = (prefs.getInt('counter2') ?? 0);
+    });
+  }
+
+  void _incrementCounterUs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       if (_counter < 12) {
-      _counter++;
+        _counter = (prefs.getInt('counter') ?? 0) + 1;
+        prefs.setInt('counter', _counter);
       }
     });
   }
 
-  void _incrementTrucoUs() {
+  void _incrementTrucoUs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       if (_counter < 12) {
-      _counter = _counter + 3;
+        _counter = (prefs.getInt('counter') ?? 0) + 3;
+        prefs.setInt('counter', _counter);
       }
       if (_counter >= 12) {
        _counter = 12;
+       prefs.setInt('counter', _counter);
        nosGanhamos = true; 
       }
     });
   }
 
-  void _decrementCounterUs() {
+  void _decrementCounterUs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       if (_counter > 0) {
-      _counter--;
+        _counter = (prefs.getInt('counter') ?? 0) - 1;
+        prefs.setInt('counter', _counter);
       }
     });
   }
 
-  void _incrementCounterThem() {
+  void _incrementCounterThem() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       if (_counter2 < 12) {
-      _counter2++;
+        _counter2 = (prefs.getInt('counter2') ?? 0) + 1;
+        prefs.setInt('counter2', _counter2);
       }
     });
   }
 
-  void _incrementTrucoThem() {
+  void _incrementTrucoThem() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       if (_counter2 < 12) {
-      _counter2 = _counter2 + 3;
+        _counter2 = (prefs.getInt('counter2') ?? 0) + 3;
+        prefs.setInt('counter2', _counter2);
       }
       if (_counter2 >= 12) {
        _counter2 = 12;
+       prefs.setInt('counter2', _counter2);
        nosGanhamos = true; 
       }
     });
   }
 
-  void _decrementCounterThem() {
+  void _decrementCounterThem() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       if (_counter2 > 0) {
-      _counter2--;
+        _counter2 = (prefs.getInt('counter2') ?? 0) - 1;
+        prefs.setInt('counter2', _counter2);
       }
     });
   }
 
 
-  void _resetCounter() {
+  void _resetCounter() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       _counter = 0;
       _counter2 = 0;
+      prefs.setInt('counter', _counter);
+      prefs.setInt('counter2', _counter2);
     });
   }
 
